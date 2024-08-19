@@ -14,7 +14,7 @@ const useMyOtherHook = () => {
     ref.current = 2;
   }, []);
 
-  // .current not being set in render but still shows error
+  // .current is being set in a callback but still shows error
   useCustomEffect(cb);
 }
 
@@ -29,9 +29,8 @@ const useMyHook = (ref: React.RefObject<number>) => {
 function App() {
   const ref = useRef(0);
 
-  // .current not accessed in render but still shows error
+  // .current is being accessed in an effect, but still shows error
   useMyHook(ref);
-
 
   useMyOtherHook();
 

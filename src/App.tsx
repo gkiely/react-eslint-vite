@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useImperativeHandle, useRef } from 'react';
 import './App.css';
 
 
@@ -25,7 +25,6 @@ const useMyHook = (ref: React.RefObject<number>) => {
 };
 
 
-
 function App() {
   const ref = useRef(0);
 
@@ -34,12 +33,32 @@ function App() {
 
   useMyOtherHook();
 
+  const inputRef = useRef(null);
+
 
   return (
     <>
-      <div />
+      <MyInput ref={inputRef} />
     </>
   )
 }
+
+// Docs example: https://19.react.dev/reference/react/useImperativeHandle
+const MyInput = function MyInput({ ref, ...props }: { props: unknown, ref: React.RefObject<HTMLInputElement> }) {
+  const inputRef = useRef(null);
+
+  useImperativeHandle(ref, () => {
+    return {
+      focus() {
+        inputRef.current.focus();
+      },
+      scrollIntoView() {
+        inputRef.current.scrollIntoView();
+      },
+    };
+  }, []);
+
+  return <input {...props} ref={inputRef} />;
+};
 
 export default App
